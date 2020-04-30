@@ -317,7 +317,7 @@
                 "type": "CustomScript",
                 "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
-                "protectedSettings": {
+                "settings": {
                     "fileUris": [
                         "[parameters('artifactsLocation')]"
                     ],
