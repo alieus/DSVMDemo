@@ -97,7 +97,7 @@
         "vNetAddressSpace": "10.0.0.0/16",
         "subnetName": "[concat(parameters('vmName'),'-Subnet')]",
         "subnetAdressPrefix": "10.0.0.0/24",
-        "executeCommand": "[concat('sudo sh setup.sh', ' ', parameters('StorageAccountName'), ' ', parameters('StorageSaSToken'), ' ', parameters('ContainerName'))]",
+        "executeCommand": "[concat('sudo sh setup.sh', ' ', parameters('StorageAccountName'), ' ', parameters('StorageSasToken'), ' ', parameters('ContainerName'))]",
         "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnetName'),variables('subnetName'))]",
         "asgName": "[concat(parameters('vmName'),'-Asg')]",
         "asgId": "[resourceId('Microsoft.Network/applicationSecurityGroups',variables('asgName'))]",
