@@ -23,7 +23,7 @@
                 "description": "Name of the storage account for the container to be mounted"
             }
         },
-        "StorageSaSToken": {
+        "StorageSasToken": {
             "type": "securestring",
             "metadata": {
                 "description": "SaS token for the above storage account."
