@@ -9,34 +9,6 @@
                 "description": "VM Name"
             }
         },
-        "artifactsLocation": {
-            "type": "securestring",
-            "metadata": {
-                "description": "The location and sasToken of the artifact."
-            },
-            "defaultValue": ""
-        },
-        "StorageAccountName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of the storage account for the container to be mounted"
-            }
-        },
-        "StorageSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "SaS token for the above storage account."
-            },
-            "defaultValue": ""
-        },
-        "ContainerName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of the container to be mounted"
-            }
-        },
         "vmSize": {
             "type": "string",
             "defaultValue": "Standard_D1_v2",
@@ -61,18 +33,39 @@
                 "description": "Size for the Virtual Machine."
             }
         },
-        "adminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "Administrator name"
-            }
-        },
         "location": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Location for all resources."
             }
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Administrator name"
+            }
+        },
+        "StorageAccountName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the storage account for the container to be mounted"
+            }
+        },
+        "ContainerName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the container to be mounted"
+            }
+        },
+        "artifactsLocation": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The location and sasToken of the artifact."
+            },
+            "defaultValue": ""
         },
         "authenticationType": {
             "type": "string",
@@ -95,9 +88,9 @@
     "variables": {
         "vnetName": "[concat(parameters('vmName'),'-Vnet')]",
         "vNetAddressSpace": "10.0.0.0/16",
+        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
         "subnetName": "[concat(parameters('vmName'),'-Subnet')]",
         "subnetAdressPrefix": "10.0.0.0/24",
-        "executeCommand": "[concat('sudo sh setup.sh', ' ', parameters('StorageAccountName'), ' ', parameters('StorageSasToken'), ' ', parameters('ContainerName'))]",
         "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vnetName'),variables('subnetName'))]",
         "asgName": "[concat(parameters('vmName'),'-Asg')]",
         "asgId": "[resourceId('Microsoft.Network/applicationSecurityGroups',variables('asgName'))]",
@@ -317,11 +310,11 @@
                 "type": "CustomScript",
                 "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
-                "settings": {
+                "protectedSettings": {
                     "fileUris": [
                         "[parameters('artifactsLocation')]"
                     ],
-                    "commandToExecute": "[variables('executeCommand')]"
+                    "commandToExecute": "[concat('sudo sh setup.sh', ' ', parameters('StorageAccountName'), ' ', parameters('ContainerName'), ' ', listKeys(variables('storageAccountId'), '2019-04-01').keys[0].value)]"
                 }
             }
         }
